@@ -55,7 +55,8 @@ async def takeClient(websocket, path):
 			if isVerified:
 				if message.startswith("writeReview:"):
 					reviewData = json.loads(message[12:])
-					db.writeReview(localUser, reviewData["world"], reviewData["emoji"], reviewData["content"])
+					if reviewData["emoji"] in emoji.fullNameList and len(content) < 10000:
+						db.writeReview(localUser, reviewData["world"], reviewData["emoji"], reviewData["content"])
 				elif message.startswith("deleteReview:"):
 					db.deleteReview(localUser, message[13:])
 				elif message.startswith("voteUp:"):
