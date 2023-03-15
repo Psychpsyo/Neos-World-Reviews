@@ -25,6 +25,12 @@ _emojiList = requests.get("https://api.github.com/repos/twitter/twemoji/git/tree
 ).json()["tree"]
 
 nameList = []
+fullNameList = []
 for emoji in _emojiList:
 	filename = emoji["path"]
-	nameList.append(filename[:filename.index(".")])
+	filename = filename[:filename.index(".")]
+	fullNameList.append(filename)
+	# exclude skin tone / gender sequences from the basic list of emoji to be shown in the picker.
+	# TODO: refine this to whitelist things like flags
+	if not "-" in filename:
+		nameList.append(filename)
