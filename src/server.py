@@ -20,7 +20,7 @@ async def takeClient(websocket, path):
 	await websocket.send("verify:" + verificationCode)
 	emojiPageSize = 41
 	for page in range(0, len(emoji.nameList), emojiPageSize):
-		await websocket.send("emoji:" + "/".join(emoji.nameList[page:page + emojiPageSize]))
+		await websocket.send("emoji:" + "/".join(emoji.nameList[page:page + emojiPageSize]) + "/")
 	
 	async for message in websocket:
 		print("Received " + message)
