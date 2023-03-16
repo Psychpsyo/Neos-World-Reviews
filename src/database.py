@@ -46,8 +46,11 @@ def getReviews(world, localUser):
 
 def writeReview(user, world, emoji, content):
 	cur.execute("INSERT OR IGNORE INTO reviews (author, world, emoji, content) VALUES (?, ?, ?, ?)", (user, world, emoji, content))
+	if cur.lastrowid == 0:
+		return False
 	cur.execute("INSERT OR IGNORE INTO votes (user, review, value) VALUES (?, ?, 1)", (user, cur.lastrowid))
 	con.commit()
+	return True
 
 def deleteReview(user, world):
 	cur.execute("DELETE FROM reviews WHERE author = ? AND world = ?", (user, world))
