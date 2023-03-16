@@ -44,6 +44,7 @@ async def takeClient(websocket, path):
 							else:
 								if attempts == 3:
 									await websocket.send("loginFail:")
+									await websocket.send("error:5")
 									break
 								else:
 									time.sleep(2.5)
