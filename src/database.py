@@ -53,6 +53,8 @@ def writeReview(user, world, emoji, content):
 	return True
 
 def deleteReview(user, world):
+	# in theory the ON DELETE CASCADE would make this unnecessary but it turned out to not work so we need to manually delete the review votes.
+	cur.execute("DELETE FROM votes WHERE review = (SELECT id FROM reviews WHERE author = ? AND world = ?)", (user, world))
 	cur.execute("DELETE FROM reviews WHERE author = ? AND world = ?", (user, world))
 	con.commit()
 
