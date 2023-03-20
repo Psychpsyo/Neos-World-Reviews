@@ -35,9 +35,9 @@ async def takeClient(websocket, path):
 					attempts = 0
 					while attempts < 3: # in case the 5 second delay wasn't enough, we are allowed to retry twice more, hoping that the cloud variable will have updated.
 						attempts += 1
-						async with session.post("https://api.neos.com/api/readvars", json = [{"ownerId": localUser, "path": "U-Psychpsyo.worldReviewVerification"}]) as response:
+						async with session.get("https://api.neos.com/api/users/" + localUser + "/vars/U-Psychpsyo.worldReviewVerification") as response:
 							jsonData = await response.json()
-							if jsonData[0].get("variable", {}).get("value", None) == verificationCode:
+							if jsonData.get("value", None) == verificationCode:
 								isVerified = True
 								await websocket.send("loginOk:")
 								break
