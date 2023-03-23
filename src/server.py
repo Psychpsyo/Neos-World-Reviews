@@ -30,7 +30,7 @@ async def takeClient(websocket, path):
 						await websocket.send("emoji:" + "/".join(emoji.nameList[page:page + emojiPageSize]) + "/")
 					
 					if version != "1.0.1":
-						websocket.send("error:4")
+						await websocket.send("error:4")
 		else:
 			if message.startswith("login:"):
 				localUser = message[6:]
