@@ -8,24 +8,29 @@ import database as db
 import time
 import emoji
 
+validVersions = ["1", "1.0.1"]
+
 # websocket function
 async def takeClient(websocket, path):
 	isVerified = False
 	localUser = ""
-	version = -1
+	version = ""
 	
 	async for message in websocket:
-		if version == -1:
+		if version == "":
 			if message.startswith("version:"):
-				sentVersion = int(message[8:])
+				sentVersion = message[8:]
 				# ignore other versions for now
-				if sentVersion == 1:
-					version = 1
+				if sentVersion in validVersions:
+					version = sentVersion
 					verificationCode = base64.b64encode(os.urandom(32)).decode("utf-8")
 					await websocket.send("verify:" + verificationCode)
 					emojiPageSize = 41
 					for page in range(0, len(emoji.nameList), emojiPageSize):
 						await websocket.send("emoji:" + "/".join(emoji.nameList[page:page + emojiPageSize]) + "/")
+					
+					if version != "1.0.1":
+						websocket.send("error:4")
 		else:
 			if message.startswith("login:"):
 				localUser = message[6:]
