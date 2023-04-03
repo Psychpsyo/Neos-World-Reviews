@@ -8,7 +8,7 @@ import database as db
 import time
 import emoji
 
-validVersions = ["1", "1.0.1"]
+validVersions = ["1", "1.0.1", "1.1.0"]
 
 # websocket function
 async def takeClient(websocket, path):
@@ -29,7 +29,8 @@ async def takeClient(websocket, path):
 					for page in range(0, len(emoji.nameList), emojiPageSize):
 						await websocket.send("emoji:" + "/".join(emoji.nameList[page:page + emojiPageSize]) + "/")
 					
-					if version != "1.0.1":
+					# check for newest version
+					if version != validVersions[-1]:
 						await websocket.send("error:4")
 		else:
 			if message.startswith("login:"):
